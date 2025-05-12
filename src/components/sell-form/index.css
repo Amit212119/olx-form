@@ -1,0 +1,134 @@
+.form-field-container{
+    border: 1px solid #CFCDCD;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0px;
+}
+.form-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+.single-field-container{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 20px 30px;
+}
+.input-field{
+    width: 60%;
+    height: 45px;
+    border-radius: 3px;
+    outline: none;
+    border: 1px solid #CFCDCD ;
+}
+.input-field:focus {
+    outline: 3px solid #004896;
+}
+.single-field-container:focus-within label {
+    color: #004896;
+}
+.textarea-field{
+    width: 60%;
+    height: 100px;
+    border-radius: 3px;
+}
+.radio-button{
+    padding: 8px 16px;
+    border: 1px solid #CFCDCD;
+    background-color: white;
+    font-size: 14px;
+    border-radius: 3px;
+}
+.radio-button.selected {
+    background-color: #D9EBFE;
+    border: 1px solid black;
+}
+.number-radio-button.selected {
+    background-color: #D9EBFE;
+    border: 1px solid black;
+}
+.number-radio-button{
+    padding: 10px 25px;
+    border: 1px solid gray;
+    background-color: white;
+    font-size: 14px;
+    border-radius: 3px;
+}
+.button-group{
+    width: 60%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.selector-input-field{
+    height: 40px;
+    width: 60%;
+}
+hr {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin: 20px 0;
+}
+.select-heading {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border: 1px solid #CFCDCD;
+    padding: 30px;
+}
+.form-heading{
+    font-size: 20px;
+    font-weight: 700;
+}
+h3{
+    padding-bottom: 20px;
+}
+.photo-field{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    font-size: 50px;
+}
+.name-photo{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.phone-number{
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    font-weight: 700;
+}
+.post-button{
+    height: 40px;
+    width: fit-content;
+    padding: 5px;
+}
+.form-main-heading{
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.detail-heading{
+    font-size: 20px;
+        font-weight: 700;
+        margin-left: 30px;
+}
+button:hover{
+    background-color: #D9EBFE;
+}
+.error-text{
+    color: red;
+}
