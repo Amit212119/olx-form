@@ -3,12 +3,12 @@ import './index.css';
 import { TbPhotoUp } from 'react-icons/tb';
 
 const SellForm = () => {
-    const [selectedType, setSelectedType] = useState('');
-    const [selectedBHK, setSelectedBHK] = useState('');
-    const [selectedBath, setSelectedBath] = useState('');
+  const [selectedType, setSelectedType] = useState('');
+  const [selectedBHK, setSelectedBHK] = useState('');
+  const [selectedBath, setSelectedBath] = useState('');
 
   const initialValue = {
-    name: '' ,
+    name: '',
     areaSqft: '',
     carpetArea: '',
     title: '',
@@ -30,80 +30,79 @@ const SellForm = () => {
     bhk: '',
   };
   const [mandatoryData, setMandatoryData] = useState(initialValue);
-  const [formErr, setFormErr] =useState(initialErrValue);
+  const [formErr, setFormErr] = useState(initialErrValue);
 
-    const handleTypeSelect = (value) => {
-      setSelectedType(value);
-      setMandatoryData((prev) => ({ ...prev, type: value }));
-      setFormErr((prevErrors) => ({ ...prevErrors, type: '' }));
-    };
-    const handleBHK = (value) => {
-      setSelectedBHK(value);
-      setMandatoryData((prev) => ({...prev, bhk: value}))
-      setFormErr((prevErrors) => ({ ...prevErrors, type: '' }));
-    }
-    const handleBath = (value) => {
-      setSelectedBath(value);
-    }
+  const handleTypeSelect = (value) => {
+    setSelectedType(value);
+    setMandatoryData((prev) => ({ ...prev, type: value }));
+    setFormErr((prevErrors) => ({ ...prevErrors, type: '' }));
+  };
+  const handleBHK = (value) => {
+    setSelectedBHK(value);
+    setMandatoryData((prev) => ({ ...prev, bhk: value }));
+    setFormErr((prevErrors) => ({ ...prevErrors, type: '' }));
+  };
+  const handleBath = (value) => {
+    setSelectedBath(value);
+  };
   const fileInputRefs = [useRef(), useRef(), useRef(), useRef()];
 
   const handleClick = (index) => {
     fileInputRefs[index].current.click();
   };
-    const fileInputRef = useRef();
+  const fileInputRef = useRef();
 
-    const handleIconClick = () => {
-      fileInputRef.current.click();
-    };
-    const handleChange = (e) => {
-      const{name, value} =  e.target;
-      setMandatoryData({
-        ...mandatoryData,
-        [name]: value,
-      })
-      setFormErr((prevErrors) => ({ ...prevErrors, [name]: '' }));
+  const handleIconClick = () => {
+    fileInputRef.current.click();
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setMandatoryData({
+      ...mandatoryData,
+      [name]: value,
+    });
+    setFormErr((prevErrors) => ({ ...prevErrors, [name]: '' }));
+  };
+  const validation = () => {
+    const errors = {};
+    if (!mandatoryData.areaSqft) {
+      errors.areaSqft = 'This field is required';
     }
-    const validation = () => {
-      const errors= {}
-      if(!mandatoryData.areaSqft){
-        errors.areaSqft = 'This field is required';
-      }
-      if(!mandatoryData.carpetArea.trim()){
-        errors.carpetArea = 'This field is required';
-      }
-      if(!mandatoryData.type.trim()){
-        errors.type = 'This field is required';
-      }
-      if(!mandatoryData.bhk){
-        errors.bhk = 'This field is required';
-      }
-      if(!mandatoryData.title.trim()){
-        errors.title = 'This field is required';
-      }
-      if(!mandatoryData.name.trim()){
-        errors.name = 'This field is required';
-      }
-      if(!mandatoryData.description.trim()){
-        errors.description = 'This field is required';
-      }
-      if(!mandatoryData.price){
-        errors.price = 'This field is required';
-      }
-      if(!mandatoryData.state.trim()){
-        errors.state = 'This field is required';
-      }
-        setFormErr(errors);
-        return Object.keys(errors).length === 0;
-      
+    if (!mandatoryData.carpetArea.trim()) {
+      errors.carpetArea = 'This field is required';
     }
-   const handleSubmit = (e) => {
-     e.preventDefault();
-     const isValid = validation();
-     if (!isValid) return;
+    if (!mandatoryData.type.trim()) {
+      errors.type = 'This field is required';
+    }
+    if (!mandatoryData.bhk) {
+      errors.bhk = 'This field is required';
+    }
+    if (!mandatoryData.title.trim()) {
+      errors.title = 'This field is required';
+    }
+    if (!mandatoryData.name.trim()) {
+      errors.name = 'This field is required';
+    }
+    if (!mandatoryData.description.trim()) {
+      errors.description = 'This field is required';
+    }
+    if (!mandatoryData.price) {
+      errors.price = 'This field is required';
+    }
+    if (!mandatoryData.state.trim()) {
+      errors.state = 'This field is required';
+    }
+    setFormErr(errors);
+    return Object.keys(errors).length === 0;
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const isValid = validation();
+    if (!isValid) return;
 
-     console.log('Form Submitted:', mandatoryData);
-     setMandatoryData(initialValue);
-   };
+    console.log('Form Submitted:', mandatoryData);
+    setMandatoryData(initialValue);
+  };
 
   return (
     <div className='form-container'>
@@ -181,27 +180,27 @@ const SellForm = () => {
           <label htmlFor='name'>Bathrooms</label>
           <div className='button-group'>
             <button
-             className={`number-radio-button ${selectedBath === 1 ? 'selected' : ''}`}
+              className={`number-radio-button ${selectedBath === 1 ? 'selected' : ''}`}
               onClick={() => handleBath(1)}>
               1
             </button>
             <button
-             className={`number-radio-button ${selectedBath === 2 ? 'selected' : ''}`}
+              className={`number-radio-button ${selectedBath === 2 ? 'selected' : ''}`}
               onClick={() => handleBath(2)}>
               2
             </button>
             <button
-             className={`number-radio-button ${selectedBath === 3 ? 'selected' : ''}`}
+              className={`number-radio-button ${selectedBath === 3 ? 'selected' : ''}`}
               onClick={() => handleBath(3)}>
               3
             </button>
             <button
-             className={`number-radio-button ${selectedBath === 4 ? 'selected' : ''}`}
+              className={`number-radio-button ${selectedBath === 4 ? 'selected' : ''}`}
               onClick={() => handleBath(4)}>
               4
             </button>
             <button
-             className={`number-radio-button ${selectedBath === '4+' ? 'selected' : ''}`}
+              className={`number-radio-button ${selectedBath === '4+' ? 'selected' : ''}`}
               onClick={() => handleBath('4+')}>
               4+
             </button>
