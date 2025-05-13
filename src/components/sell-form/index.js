@@ -3,9 +3,19 @@ import './index.css';
 import { TbPhotoUp } from 'react-icons/tb';
 
 const SellForm = () => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const [selectedType, setSelectedType] = useState('');
   const [selectedBHK, setSelectedBHK] = useState('');
   const [selectedBath, setSelectedBath] = useState('');
+  const [selectedProject, setSelectedProject] = useState('');
+  const [furnished, setFurnished] = useState('');
+  const [listedBy, setListedBy] = useState('');
+  const wordLimits = {
+    title: 70,
+    description: 4000,
+    name: 30,
+  };
 
   const initialValue = {
     name: '',
@@ -17,6 +27,10 @@ const SellForm = () => {
     price: '',
     type: '',
     bhk: '',
+    project: '',
+    bath: '',
+    furnish: '',
+    listed: '',
   };
   const initialErrValue = {
     name: '',
@@ -28,6 +42,10 @@ const SellForm = () => {
     price: '',
     type: '',
     bhk: '',
+    project: '',
+    bath: '',
+    furnish: '',
+    listed: '',
   };
   const [mandatoryData, setMandatoryData] = useState(initialValue);
   const [formErr, setFormErr] = useState(initialErrValue);
@@ -40,10 +58,27 @@ const SellForm = () => {
   const handleBHK = (value) => {
     setSelectedBHK(value);
     setMandatoryData((prev) => ({ ...prev, bhk: value }));
-    setFormErr((prevErrors) => ({ ...prevErrors, type: '' }));
+    setFormErr((prevErrors) => ({ ...prevErrors, bhk: '' }));
   };
   const handleBath = (value) => {
     setSelectedBath(value);
+    setMandatoryData((prev) => ({ ...prev, bath: value }));
+    setFormErr((prevErrors) => ({ ...prevErrors, bath: '' }));
+  };
+  const handleFurnished = (value) => {
+    setFurnished(value);
+    setMandatoryData((prev) => ({ ...prev, furnish: value }));
+    setFormErr((prevErrors) => ({ ...prevErrors, furnish: '' }));
+  };
+  const handleProjectStatus = (value) => {
+    setSelectedProject(value);
+    setMandatoryData((prev) => ({ ...prev, project: value }));
+    setFormErr((prevErrors) => ({ ...prevErrors, project: '' }));
+  };
+  const handleListedBy = (value) => {
+    setListedBy(value);
+    setMandatoryData((prev) => ({ ...prev, listed: value }));
+    setFormErr((prevErrors) => ({ ...prevErrors, listed: '' }));
   };
   const fileInputRefs = [useRef(), useRef(), useRef(), useRef()];
 
@@ -57,6 +92,10 @@ const SellForm = () => {
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (wordLimits[name]) {
+      const wordCount = value.trim().length;
+      if (wordCount > wordLimits[name]) return;
+    }
     setMandatoryData({
       ...mandatoryData,
       [name]: value,
@@ -66,42 +105,48 @@ const SellForm = () => {
   const validation = () => {
     const errors = {};
     if (!mandatoryData.areaSqft) {
-      errors.areaSqft = 'This field is required';
+      errors.areaSqft = 'Super Builtup area sqft is mandatory. Please complete the required field.';
     }
-    if (!mandatoryData.carpetArea.trim()) {
-      errors.carpetArea = 'This field is required';
+    if (!mandatoryData.carpetArea) {
+      errors.carpetArea = 'Carpet Area sqft is mandatory. Please complete the required field.';
     }
     if (!mandatoryData.type.trim()) {
-      errors.type = 'This field is required';
+      errors.type = 'Type is mandatory. Please complete the required field.';
     }
     if (!mandatoryData.bhk) {
       errors.bhk = 'This field is required';
     }
     if (!mandatoryData.title.trim()) {
-      errors.title = 'This field is required';
+      errors.title = 'A minimum length of 10 characters is required. Please edit the field.';
     }
     if (!mandatoryData.name.trim()) {
       errors.name = 'This field is required';
     }
     if (!mandatoryData.description.trim()) {
-      errors.description = 'This field is required';
+      errors.description = 'A minimum length of 10 characters is required. Please edit the field.';
     }
     if (!mandatoryData.price) {
       errors.price = 'This field is required';
     }
     if (!mandatoryData.state.trim()) {
-      errors.state = 'This field is required';
+      errors.state = 'This field is mandatory.';
     }
     setFormErr(errors);
     return Object.keys(errors).length === 0;
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsSubmitted(true);
     const isValid = validation();
     if (!isValid) return;
 
     console.log('Form Submitted:', mandatoryData);
     setMandatoryData(initialValue);
+    setFormErr(initialErrValue);
+    setSelectedType('');
+    setSelectedBHK('');
+    setSelectedBath('');
+    setIsSubmitted(false);
   };
 
   return (
@@ -120,24 +165,32 @@ const SellForm = () => {
           <span className='detail-heading'>INCLUDE SOME DETAILS</span>
         </div>
         <div className='single-field-container'>
-          <label htmlFor='name'>Type*</label>
+          <label
+            htmlFor='name'
+            className={formErr.type ? 'error-label' : ''}>
+            Type*
+          </label>
           <div className='button-group'>
             <button
+              type='button'
               className={`radio-button ${selectedType === 'Flats / Apartments' ? 'selected' : ''}`}
               onClick={() => handleTypeSelect('Flats / Apartments')}>
               Flats / Apartments
             </button>
             <button
+              type='button'
               className={`radio-button ${selectedType === 'Independent/Builder Floors' ? 'selected' : ''}`}
               onClick={() => handleTypeSelect('Independent/Builder Floors')}>
               Independent/Builder Floors
             </button>
             <button
+              type='button'
               className={`radio-button ${selectedType === 'Farm House' ? 'selected' : ''}`}
               onClick={() => handleTypeSelect('Farm House')}>
               Farm House
             </button>
             <button
+              type='button'
               className={`radio-button ${selectedType === 'House & Villa' ? 'selected' : ''}`}
               onClick={() => handleTypeSelect('House & Villa')}>
               House & Villa
@@ -149,26 +202,31 @@ const SellForm = () => {
           <label htmlFor='name'>BHK</label>
           <div className='button-group'>
             <button
+              type='button'
               className={`number-radio-button ${selectedBHK === 1 ? 'selected' : ''}`}
               onClick={() => handleBHK(1)}>
               1
             </button>
             <button
+              type='button'
               className={`number-radio-button ${selectedBHK === 2 ? 'selected' : ''}`}
               onClick={() => handleBHK(2)}>
               2
             </button>
             <button
+              type='button'
               className={`number-radio-button ${selectedBHK === 3 ? 'selected' : ''}`}
               onClick={() => handleBHK(3)}>
               3
             </button>
             <button
+              type='button'
               className={`number-radio-button ${selectedBHK === 4 ? 'selected' : ''}`}
               onClick={() => handleBHK(4)}>
               4
             </button>
             <button
+              type='button'
               className={`number-radio-button ${selectedBHK === '4+' ? 'selected' : ''}`}
               onClick={() => handleBHK('4+')}>
               4+
@@ -180,26 +238,31 @@ const SellForm = () => {
           <label htmlFor='name'>Bathrooms</label>
           <div className='button-group'>
             <button
+              type='button'
               className={`number-radio-button ${selectedBath === 1 ? 'selected' : ''}`}
               onClick={() => handleBath(1)}>
               1
             </button>
             <button
+              type='button'
               className={`number-radio-button ${selectedBath === 2 ? 'selected' : ''}`}
               onClick={() => handleBath(2)}>
               2
             </button>
             <button
+              type='button'
               className={`number-radio-button ${selectedBath === 3 ? 'selected' : ''}`}
               onClick={() => handleBath(3)}>
               3
             </button>
             <button
+              type='button'
               className={`number-radio-button ${selectedBath === 4 ? 'selected' : ''}`}
               onClick={() => handleBath(4)}>
               4
             </button>
             <button
+              type='button'
               className={`number-radio-button ${selectedBath === '4+' ? 'selected' : ''}`}
               onClick={() => handleBath('4+')}>
               4+
@@ -209,29 +272,78 @@ const SellForm = () => {
         <div className='single-field-container'>
           <label htmlFor='name'>Furnishing</label>
           <div className='button-group'>
-            <button className='radio-button'>Furnished</button>
-            <button className='radio-button'>Semi-Furnished</button>
-            <button className='radio-button'>Unfurnished</button>
+            <button
+              onClick={() => handleFurnished('Furnished')}
+              type='button'
+              className={`radio-button ${furnished === 'Furnished' ? 'selected' : ''}`}>
+              Furnished
+            </button>
+            <button
+              onClick={() => handleFurnished('Semi-Furnished')}
+              type='button'
+              className={`radio-button ${furnished === 'Semi-Furnished' ? 'selected' : ''}`}>
+              Semi-Furnished
+            </button>
+            <button
+              onClick={() => handleFurnished('Unfurnished')}
+              type='button'
+              className={`radio-button ${furnished === 'Unfurnished' ? 'selected' : ''}`}>
+              Unfurnished
+            </button>
           </div>
         </div>
         <div className='single-field-container'>
           <label htmlFor='name'>Project Status</label>
           <div className='button-group'>
-            <button className='radio-button'>New Launch</button>
-            <button className='radio-button'>Ready to Move</button>
-            <button className='radio-button'>Under Construction</button>
+            <button
+              onClick={() => handleProjectStatus('New Launch')}
+              type='button'
+              className={`radio-button ${selectedProject === 'New Launch' ? 'selected' : ''}`}>
+              New Launch
+            </button>
+            <button
+              onClick={() => handleProjectStatus('Ready to Move')}
+              type='button'
+              className={`radio-button ${selectedProject === 'Ready to Move' ? 'selected' : ''}`}>
+              Ready to Move
+            </button>
+            <button
+              onClick={() => handleProjectStatus('Under Construction')}
+              type='button'
+              className={`radio-button ${selectedProject === 'Under Construction' ? 'selected' : ''}`}>
+              Under Construction
+            </button>
           </div>
         </div>
         <div className='single-field-container'>
           <label htmlFor='name'>Listed by</label>
           <div className='button-group'>
-            <button className='radio-button'>Builder</button>
-            <button className='radio-button'>Dealer</button>
-            <button className='radio-button'>Owner</button>
+            <button
+              onClick={() => handleListedBy('Builder')}
+              type='button'
+              className={`radio-button ${listedBy === ' Builder' ? 'selected' : ''}`}>
+              Builder
+            </button>
+            <button
+              onClick={() => handleListedBy('Dealer')}
+              type='button'
+              className={`radio-button ${listedBy === 'Dealer' ? 'selected' : ''}`}>
+              Dealer
+            </button>
+            <button
+              onClick={() => handleListedBy('Owner')}
+              type='button'
+              className={`radio-button ${listedBy === 'Owner' ? 'selected' : ''}`}>
+              Owner
+            </button>
           </div>
         </div>
         <div className='single-field-container'>
-          <label htmlFor='name'>Super Builtup area sqft *</label>
+          <label
+            htmlFor='name'
+            className={formErr.areaSqft ? 'error-label' : ''}>
+            Super Builtup area sqft *
+          </label>
           <input
             type='number'
             id='name'
@@ -243,7 +355,11 @@ const SellForm = () => {
           {formErr.areaSqft && <span className='error-text'>{formErr.areaSqft}</span>}
         </div>
         <div className='single-field-container'>
-          <label htmlFor='name'>Carpet Area sqft *</label>
+          <label
+            htmlFor='name'
+            className={formErr.carpetArea ? 'error-label' : ''}>
+            Carpet Area sqft *
+          </label>
           <input
             type='number'
             id='name'
@@ -284,11 +400,31 @@ const SellForm = () => {
         <div className='single-field-container'>
           <label htmlFor='name'>Car Parking</label>
           <div className='button-group'>
-            <button className='number-radio-button'>0</button>
-            <button className='number-radio-button'>1</button>
-            <button className='number-radio-button'>2</button>
-            <button className='number-radio-button'>3</button>
-            <button className='number-radio-button'>3+</button>
+            <button
+              type='button'
+              className='number-radio-button'>
+              0
+            </button>
+            <button
+              type='button'
+              className='number-radio-button'>
+              1
+            </button>
+            <button
+              type='button'
+              className='number-radio-button'>
+              2
+            </button>
+            <button
+              type='button'
+              className='number-radio-button'>
+              3
+            </button>
+            <button
+              type='button'
+              className='number-radio-button'>
+              3+
+            </button>
           </div>
         </div>
         <div className='single-field-container'>
@@ -308,9 +444,16 @@ const SellForm = () => {
             name='name'
             className='input-field'
           />
+          <p className='word-counter'>
+            {mandatoryData.name.trim() === '' ? 0 : mandatoryData.name.trim().length} / {wordLimits.name}
+          </p>
         </div>
         <div className='single-field-container'>
-          <label htmlFor='name'>Add title*</label>
+          <label
+            htmlFor='name'
+            className={formErr.title ? 'error-label' : ''}>
+            Add title*
+          </label>
           <input
             type='text'
             id='name'
@@ -320,9 +463,16 @@ const SellForm = () => {
             value={mandatoryData.title}
           />
           {formErr.title && <span className='error-text'>{formErr.title}</span>}
+          <p className='word-counter'>
+            {mandatoryData.title.trim() === '' ? 0 : mandatoryData.title.trim().length} / {wordLimits.title}
+          </p>
         </div>
         <div className='single-field-container'>
-          <label htmlFor='name'>Description*</label>
+          <label
+            htmlFor='name'
+            className={formErr.description ? 'error-label' : ''}>
+            Description*
+          </label>
           <textarea
             id='name'
             name='description'
@@ -333,11 +483,19 @@ const SellForm = () => {
             value={mandatoryData.description}
           />
           {formErr.description && <span className='error-text'>{formErr.description}</span>}
+          <p className='word-counter'>
+            {mandatoryData.description.trim() === '' ? 0 : mandatoryData.description.trim().length} /{' '}
+            {wordLimits.description}
+          </p>
         </div>
         <hr />
         <div className='single-field-container'>
           <h3>SET A PRICE</h3>
-          <label htmlFor='name'>Price*</label>
+          <label
+            htmlFor='name'
+            className={formErr.price ? 'error-label' : ''}>
+            Price*
+          </label>
           <input
             type='text'
             id='name'
@@ -370,15 +528,48 @@ const SellForm = () => {
         </div>
         <hr />
         <div className='single-field-container'>
-          <label htmlFor='name'>State*</label>
-          <input
-            type='text'
-            id='name'
+          <label
+            htmlFor='name'
+            className={formErr.state ? 'error-label' : ''}>
+            State*
+          </label>
+          <select
+            id='state'
             name='state'
-            className='input-field'
+            className={`input-field ${formErr.state ? 'error-select' : ''}`}
             onChange={handleChange}
-            value={mandatoryData.state}
-          />
+            value={mandatoryData.state}>
+            <option value=''>Select a State</option>
+            <option value='Andhra Pradesh'>Andhra Pradesh</option>
+            <option value='Arunachal Pradesh'>Arunachal Pradesh</option>
+            <option value='Assam'>Assam</option>
+            <option value='Bihar'>Bihar</option>
+            <option value='Chhattisgarh'>Chhattisgarh</option>
+            <option value='Delhi'>Delhi</option>
+            <option value='Goa'>Goa</option>
+            <option value='Gujarat'>Gujarat</option>
+            <option value='Haryana'>Haryana</option>
+            <option value='Himachal Pradesh'>Himachal Pradesh</option>
+            <option value='Jharkhand'>Jharkhand</option>
+            <option value='Karnataka'>Karnataka</option>
+            <option value='Kerala'>Kerala</option>
+            <option value='Madhya Pradesh'>Madhya Pradesh</option>
+            <option value='Maharashtra'>Maharashtra</option>
+            <option value='Manipur'>Manipur</option>
+            <option value='Meghalaya'>Meghalaya</option>
+            <option value='Mizoram'>Mizoram</option>
+            <option value='Nagaland'>Nagaland</option>
+            <option value='Odisha'>Odisha</option>
+            <option value='Punjab'>Punjab</option>
+            <option value='Rajasthan'>Rajasthan</option>
+            <option value='Sikkim'>Sikkim</option>
+            <option value='Tamil Nadu'>Tamil Nadu</option>
+            <option value='Telangana'>Telangana</option>
+            <option value='Tripura'>Tripura</option>
+            <option value='Uttar Pradesh'>Uttar Pradesh</option>
+            <option value='Uttarakhand'>Uttarakhand</option>
+            <option value='West Bengal'>West Bengal</option>
+          </select>
           {formErr.state && <span className='error-text'>{formErr.state}</span>}
         </div>
         <hr />
@@ -402,11 +593,14 @@ const SellForm = () => {
                 type='text'
                 id='name'
                 name='name'
-                className='input-field'
+                className='name-input-field'
                 onChange={handleChange}
                 value={mandatoryData.name}
               />
               {formErr.name && <span className='error-text'>{formErr.name}</span>}
+              <p className='name-word-counter'>
+                {mandatoryData.name.trim() === '' ? 0 : mandatoryData.name.trim().length} / {wordLimits.name}
+              </p>
             </div>
           </div>
           <div className='phone-number'>
