@@ -15,6 +15,7 @@ const SellForm = () => {
     title: 70,
     description: 4000,
     name: 30,
+
   };
 
   const initialValue = {
@@ -444,9 +445,6 @@ const SellForm = () => {
             name='name'
             className='input-field'
           />
-          <p className='word-counter'>
-            {mandatoryData.name.trim() === '' ? 0 : mandatoryData.name.trim().length} / {wordLimits.name}
-          </p>
         </div>
         <div className='single-field-container'>
           <label
@@ -484,7 +482,7 @@ const SellForm = () => {
           />
           {formErr.description && <span className='error-text'>{formErr.description}</span>}
           <p className='word-counter'>
-            {mandatoryData.description.trim() === '' ? 0 : mandatoryData.description.trim().length} /{' '}
+            {mandatoryData.description.trim() === '' ? 0 : mandatoryData.description.trim().length} /
             {wordLimits.description}
           </p>
         </div>
